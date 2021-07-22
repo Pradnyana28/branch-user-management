@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  mongo:
+    container_name: bonsai-mongo
+    image: mongo
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_INIT_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_INIT_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_USERNAME=${MONGO_INITDB_USERNAME}
+      - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - bonsai-mongo:/data/db/bonsai
+      - ./shells/init-mongodb.sh:/docker-entrypoint-initdb.d/init-mongodb.sh:ro
+
+volumes:
+  bonsai-mongo:
