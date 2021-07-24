@@ -12,7 +12,7 @@ import {
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthGuard } from 'src/common/AuthGuard';
 import { UserSession } from 'src/common/decorators';
-import { RpcValidationFilter } from 'src/exception/rpc-exception';
+import { RpcValidationFilter } from 'src/common/rpc-exception';
 import { CreateUserDto } from 'src/validator/create-user.dto';
 import { UpdateUserDto } from 'src/validator/update-user.dto';
 import { IUser } from './user.interface';
@@ -39,6 +39,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ role: 'user', cmd: 'update' })
   async updateUser(
     @UserSession() user: any,

@@ -5,7 +5,6 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { ServerResponse } from 'http';
 import { Response } from 'express';
 
 @Catch(HttpException)
@@ -15,7 +14,7 @@ export class RpcValidationFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
-    if (response instanceof ServerResponse) {
+    if (host.getType() === 'http') {
       response.status(status).json(exception.getResponse());
     } else {
       return new RpcException(exception.getResponse());

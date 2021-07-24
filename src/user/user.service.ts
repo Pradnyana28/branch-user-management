@@ -17,12 +17,12 @@ export class UserService {
   ) {}
 
   async findOne(query: FilterQuery<User>): Promise<UserDocument | null> {
-    Logger.debug('QUERY', query);
+    Logger.debug(query, 'QUERY');
     return await this.userModel.findOne(query);
   }
 
   async createUser(user: CreateUserDto): Promise<UserDocument> {
-    Logger.debug('QUERY', hideSensitiveData(clone(user)));
+    Logger.debug(hideSensitiveData(clone(user)), 'QUERY');
 
     try {
       await this.registerUserValidation(user);
@@ -34,11 +34,11 @@ export class UserService {
         ...user,
         password: hashPassword,
       });
-      Logger.debug('SUCCESS createing new user');
+      Logger.log('SUCCESS createing new user');
 
       return hideSensitiveData<any>(res.toJSON());
     } catch (e) {
-      Logger.log(e);
+      Logger.debug(e);
       throw e;
     }
   }
@@ -64,7 +64,7 @@ export class UserService {
     idUser: string | Types.ObjectId,
     data: UpdateUserDto,
   ): Promise<UserDocument> {
-    Logger.debug('QUERY', hideSensitiveData(clone(data)));
+    Logger.debug(hideSensitiveData(clone(data)), 'QUERY');
     try {
       await this.updateUserValidation(idUser, data);
 
@@ -74,15 +74,15 @@ export class UserService {
         updateParams.password = await hash(data.password, salt);
       }
 
-      Logger.debug('Update params', updateParams);
+      Logger.debug(updateParams, 'Update params');
       await this.userModel.updateOne({ _id: idUser }, updateParams);
-      Logger.debug('User data successfully updated');
+      Logger.log('User data successfully updated');
 
       const updatedUser = await this.userModel.findById(idUser);
 
       return hideSensitiveData<any>(updatedUser.toJSON());
     } catch (e) {
-      Logger.log(e);
+      Logger.debug(e);
       throw e;
     }
   }
