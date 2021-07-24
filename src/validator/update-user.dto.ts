@@ -1,22 +1,15 @@
 import {
   IsAlphanumeric,
   IsEmail,
-  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Types } from 'mongoose';
 import { IUser } from 'src/user/user.interface';
 
 export class UpdateUserDto implements IUser {
-  @IsString()
-  @IsMongoId()
-  @IsNotEmpty()
-  idUser: string | Types.ObjectId;
-
   @IsString()
   @IsNotEmpty()
   name: string;

@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthGuard } from 'src/common/AuthGuard';
-import { UserSession } from 'src/common/decorators';
 import { RpcValidationFilter } from 'src/common/rpc-exception';
 import { CreateUserDto } from 'src/validator/create-user.dto';
 import { UpdateUserDto } from 'src/validator/update-user.dto';
@@ -37,17 +36,16 @@ export class UserController {
     return this.userService.createUser(data);
   }
 
-  @UseGuards(AuthGuard)
   @Put(':id')
-  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ role: 'user', cmd: 'update' })
+  @UseGuards(AuthGuard)
+  @UseFilters(new RpcValidationFilter())
+  @UsePipes(ValidationPipe)
   async updateUser(
-    @UserSession() user: any,
     @Param() params: Record<string, unknown>,
     @Payload() data: UpdateUserDto,
   ): Promise<IUser> {
-    Logger.log('authentication', user);
     Logger.log('START updating user data', { params, data });
-    return this.userService.updateUser(data.idUser, data);
+    return this.userService.updateUser(params.id as string, data);
   }
 }
