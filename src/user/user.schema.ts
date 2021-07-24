@@ -10,6 +10,7 @@ export class User implements IUser {
   @Prop() username: string;
   @Prop() password: string;
   @Prop() email: string;
+  @Prop() phone?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
