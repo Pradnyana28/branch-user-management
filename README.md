@@ -46,14 +46,16 @@ make build-image
 
 ## Run Auth Management Image
 
+Make sure docker network with name bonsai-network already exist
+
 ```bash
-docker run -e 'JWT_SECRET_KEY=Yx$83(js)a#UgH' \
--e 'MONGODB_HOST=localhost' \
--e 'MONGODB_PORT=27018' \
--e 'MONGODB_INIT_ROOT_USERNAME=admin' \
--e 'MONGODB_INIT_ROOT_PASSWORD=root' \
--e 'MONGO_INITDB_DATABASE=bonsai' \
+docker run -it --rm --network bonsai-network --name user-service \
+-h user-service-host -d \
+-e 'JWT_SECRET_KEY=Yx$83(js)a#UgH' \
+-e 'MONGODB_HOST=bonsaidb' \
+-e 'MONGODB_PORT=27017' \
+-e 'MONGO_INITDB_DATABASE=users' \
 -e 'MONGO_INITDB_USERNAME=dekjon' \
--e 'MONGO_INITDB_PASSWORD=DontLookBack' \
--p 3010:3010 kadekpradnyana/bonsai-user-mgmt
+-e 'MONGO_INITDB_PASSWORD=Dontlookback' \
+-p 3010:3010 -p 4010:4010 kadekpradnyana/bonsai-user-mgmt
 ```
