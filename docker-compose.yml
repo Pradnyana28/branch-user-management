@@ -24,12 +24,16 @@ services:
   user-service:
     container_name: bonsai-user-mgmt
     restart: always
-    image: kadekpradnyana/bonsai-user-mgmt
+    # image: kadekpradnyana/bonsai-user-mgmt
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.dev
     volumes:
       - /bonsai/user/node_modules
       - .:/bonsai/user
     ports:
       - 3010:3010
+      - 4010:4010
     env_file:
       - ./.env
     depends_on:
