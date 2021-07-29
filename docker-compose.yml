@@ -43,3 +43,4 @@ volumes:
   bonsai-mongo:
 networks: 
   bonsai-network:
+    external: true
