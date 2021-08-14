@@ -19,9 +19,35 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+          env:
+            - name: MONGODB_HOST
+              value: "localhost"
+            - name: MONGODB_PORT
+              value: "27017"
+            - name: MONGO_INITDB_DATABASE
+              value: "users"
+            - name: MONGO_INITDB_USERNAME
+              value: "dekjon"
+            - name: MONGO_INITDB_PASSWORD
+              value: "Dontlookback"
           ports:
             - containerPort: 3010
             - containerPort: 4010
+        - name: user-db-service
+          image: kadekpradnyana/bonsai-user-table
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: MONGO_INITDB_USERNAME
+              value: "dekjon"
+            - name: MONGO_INITDB_PASSWORD
+              value: "Dontlookback"
+            - name: MONGO_INITDB_DATABASE
+              value: "users"
+          ports:
+            - containerPort: 27017
 
 ---
 apiVersion: v1
