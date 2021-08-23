@@ -35,7 +35,7 @@ spec:
               memory: "512Mi"
               cpu: "500m"
           env:
-            - name: MONGODB_HOST
+            - name: MONGODB_URI
               value: "mongodb://dekjon:Dontlookback@localhost:27017/users"
           ports:
             - containerPort: 3010
