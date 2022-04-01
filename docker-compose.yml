@@ -3,21 +3,45 @@ version: "3"
 services:
   mongo:
     container_name: bonsai-mongo
-    image: mongo
+    image: kadekpradnyana/bonsai-user-table
     restart: always
     env_file:
       - ./.env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_INIT_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_INIT_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - MONGO_INITDB_USERNAME=${MONGO_INITDB_USERNAME}
       - MONGO_INITDB_PASSWORD=${MONGO_INITDB_PASSWORD}
     ports:
       - 27017:27017
+    networks: 
+      - bonsai-network
     volumes:
       - bonsai-mongo:/data/db/bonsai
-      - ./shells/init-mongodb.sh:/docker-entrypoint-initdb.d/init-mongodb.sh:ro
+
+  user-service:
+    container_name: bonsai-user-mgmt
+    restart: always
+    # image: kadekpradnyana/bonsai-user-mgmt
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - /bonsai/user/node_modules
+      - .:/bonsai/user
+    ports:
+      - 3010:3010
+      - 4010:4010
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+    networks: 
+      - bonsai-network
+    environment:
+      - NODE_ENV=development
 
 volumes:
   bonsai-mongo:
+networks: 
+  bonsai-network:
+    external: true
